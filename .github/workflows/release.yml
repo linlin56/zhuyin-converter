@@ -1,0 +1,94 @@
+name: Release
+
+# Push a tag vX.Y.Z (the version in Cargo.toml) to publish the crate to crates.io and the wheels to PyPI.
+# Setup once:
+# - crates.io: an API token in the repository secret CARGO_REGISTRY_TOKEN
+# - PyPI: a trusted publisher for this repository, workflow release.yml, environment pypi (no token)
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  check:
+    uses: ./.github/workflows/ci.yml
+
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: The tag matches Cargo.toml
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          v=$(grep -m1 '^version' Cargo.toml | cut -d'"' -f2)
+          [ "$v" = "$tag" ] || { echo "::error::Cargo.toml is $v, tag is $tag"; exit 1; }
+
+  wheels:
+    needs: [check, version]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # musllinux wheels are for Linux distributions without glibc, such as Alpine.
+        include:
+          - { platform: linux, os: ubuntu-latest, target: x86_64, manylinux: auto }
+          - { platform: linux, os: ubuntu-latest, target: aarch64, manylinux: auto }
+          - { platform: musllinux, os: ubuntu-latest, target: x86_64, manylinux: musllinux_1_2 }
+          - { platform: musllinux, os: ubuntu-latest, target: aarch64, manylinux: musllinux_1_2 }
+          - { platform: windows, os: windows-latest, target: x64, python-arch: x64 }
+          - { platform: windows, os: windows-11-arm, target: aarch64, python-arch: arm64 }
+          - { platform: macos, os: macos-15-intel, target: x86_64 }
+          - { platform: macos, os: macos-14, target: aarch64 }
+    steps:
+      - uses: actions/checkout@v7
+      # On Windows, maturin needs a Python of the same architecture as the wheel.
+      - uses: actions/setup-python@v7
+        if: runner.os == 'Windows'
+        with:
+          python-version: "3.13"
+          architecture: ${{ matrix.python-arch }}
+      - uses: PyO3/maturin-action@v1
+        with:
+          target: ${{ matrix.target }}
+          args: --release --out dist
+          manylinux: ${{ matrix.manylinux }}
+      - uses: actions/upload-artifact@v7
+        with:
+          name: wheels-${{ matrix.platform }}-${{ matrix.target }}
+          path: dist
+
+  sdist:
+    needs: [check, version]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: PyO3/maturin-action@v1
+        with:
+          command: sdist
+          args: --out dist
+      - uses: actions/upload-artifact@v7
+        with:
+          name: sdist
+          path: dist
+
+  pypi:
+    needs: [wheels, sdist]
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write  # trusted publishing
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: pypa/gh-action-pypi-publish@release/v1
+
+  # crates.io comes last, so that a failed PyPI release doesn't leave the crate published alone.
+  crates:
+    needs: [pypi]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo publish
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}

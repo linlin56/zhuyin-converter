@@ -1,0 +1,29 @@
+# zhuyin_to_pinyin
+# input<TAB>expected<TAB>comment, with an empty expected when the input isn't a reading
+ㄒㄧㄥˊ ㄉㄨㄥˋ	xíng dòng
+˙ㄌㄜ	le
+ㄉㄚˋㄢ	dà'ān
+ㄋㄩˇㄦˊ	nǚ'ér
+ㄏㄨㄚㄦ	huār
+ㄓㄜˋㄦ	zhèr
+ㄅㄚㄦˇㄍㄢˋ	bā'ěrgàn	a toned ㄦ is 爾 itself, not erhua
+ㄌㄠˇㄖㄣˊ	lǎorén	the r of 人 isn't erhua
+˙ㄉㄜㄑㄧˇ	deqǐ	a neutral tone inside a word
+˙ㄅㄛ˙ㄅㄛㄇㄧˇ	bobomǐ	Taiwan's dot, before its syllable
+ㄇㄚ ˙ㄌㄡ	mā lou
+ㄖㄣˋㄕ˙ ㄇㄚ˙	rènshi ma	dots after their syllables, at the end of words
+ㄅㄞㄅㄞ	bāibāi	no mark: first tone
+ㄐㄩㄝˊㄉㄧㄥˋ	juédìng
+ㄌㄩㄝˋ	lüè
+ㄧㄥㄒㄩㄥˊ	yīngxióng
+ㄓ	zhī
+ㄕˋ	shì
+ㄌㄧㄡˊ	liú
+ㄍㄨㄟˇ	guǐ
+ㄇˊ	ḿ
+˙ㄫㄐㄧㄥˋ	ngjìng
+xíng	
+		empty
+CP	
+ㄅㄅㄅ	
+ㆠㄚ	

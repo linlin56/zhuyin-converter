@@ -1,0 +1,8 @@
+target/
+Cargo.lock
+__pycache__/
+.venv/
+*.so
+*.pyd
+dist/
+.pytest_cache/

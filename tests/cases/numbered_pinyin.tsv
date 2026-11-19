@@ -1,0 +1,10 @@
+# numbered_pinyin
+# input<TAB>expected<TAB>comment, with an empty expected when the input isn't a reading
+ㄈㄢˊㄊㄧˇㄗˋ	fan2 ti3 zi4
+˙ㄇㄚ	ma5
+ㄍㄠ	gao1
+fántǐzì	fan2 ti3 zi4
+fan2 ti3 zi4	fan2 ti3 zi4
+lǜ	lü4
+ㄓㄜˋㄦ	zher4
+not a reading	

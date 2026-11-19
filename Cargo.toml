@@ -1,0 +1,22 @@
+[package]
+name = "zhuyin-converter"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.80"
+description = "Pinyin <-> zhuyin (bopomofo) conversion, Taiwan conventions"
+license = "AGPL-3.0-or-later"
+authors = ["linlin56"]
+repository = "https://github.com/linlin56/zhuyin-converter"
+readme = "README.md"
+keywords = ["zhuyin", "bopomofo", "pinyin", "chinese", "mandarin"]
+categories = ["text-processing", "internationalization"]
+# What goes to crates.io (Cargo.toml added by cargo): no Python packaging, no CI
+include = ["/src/**/*.rs", "/tests/cases.rs", "/tests/cases/*.tsv", "/README.md", "/LICENSE"]
+
+[features]
+# The Python binding (src/python.rs), built by maturin from pyproject.toml
+python = ["dep:pyo3"]
+
+[dependencies]
+# abi3: one wheel per platform for every Python from 3.9
+pyo3 = { version = "0.30", features = ["abi3-py39"], optional = true }
