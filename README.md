@@ -47,6 +47,7 @@ assert_eq!(pinyin_to_zhuyin("lǚyóu"), "ㄌㄩˇ ㄧㄡˊ");
 One crate, published to crates.io, and to PyPI as a Python module built by maturin from `pyproject.toml`.
 
 - `src/`: the conversion, and the Python binding in `python.rs` (feature `python`, off for Rust users)
+- `zhuyin_converter.pyi`: the types of the Python module, for editors
 - `tests/`: the shared cases in `tests/cases/*.tsv` (`input<TAB>expected<TAB>comment`), read by the Rust tests
   (`cases.rs`) and the Python ones (`test_cases.py`)
 - `.github/workflows/`: CI, and the release: push a tag `vX.Y.Z` to publish both

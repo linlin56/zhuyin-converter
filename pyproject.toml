@@ -27,3 +27,5 @@ test = ["pytest"]
 [tool.maturin]
 module-name = "zhuyin_converter"
 features = ["python", "pyo3/extension-module"]
+# The type stub sits next to this file, where maturin looks for it, and the sdist needs it too.
+include = [{ path = "zhuyin_converter.pyi", format = "sdist" }]
