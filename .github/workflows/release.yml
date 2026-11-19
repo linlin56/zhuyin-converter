@@ -36,7 +36,7 @@ jobs:
           - { platform: windows, os: windows-latest, target: x64, python-arch: x64 }
           - { platform: windows, os: windows-11-arm, target: aarch64, python-arch: arm64 }
           - { platform: macos, os: macos-15-intel, target: x86_64 }
-          - { platform: macos, os: macos-14, target: aarch64 }
+          - { platform: macos, os: macos-latest, target: aarch64 }
     steps:
       - uses: actions/checkout@v7
       # On Windows, maturin needs a Python of the same architecture as the wheel.
