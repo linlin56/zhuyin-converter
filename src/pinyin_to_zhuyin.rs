@@ -31,9 +31,12 @@ fn zhuyin_mark(tone: u8) -> &'static str {
     }
 }
 
-/// Rewrites two CC-CEDICT spellings: u: for ü (lu:4), and r5 for an erhua in pinyin with tone marks (yīxiàr5).
-fn cedict_spellings(text: &str) -> String {
-    let text = text.replace("u:", "ü").replace("U:", "Ü");
+/// Rewrites the spellings some common dictionaries use:
+// - u for ü (lu:4)
+// - r5 for an erhua in pinyin with tone marks (yīxiàr5),
+// - the script ɡ (U+0261) of for g
+fn dictionary_spellings(text: &str) -> String {
+    let text = text.replace("u:", "ü").replace("U:", "Ü").replace('\u{261}', "g");
     let chars: Vec<char> = text.chars().collect();
     let mut out = String::with_capacity(text.len());
     let mut i = 0;
@@ -178,7 +181,7 @@ pub fn pinyin_to_zhuyin(pinyin: &str) -> String {
     if is_zhuyin(text) {
         return text.to_string();
     }
-    let text = cedict_spellings(text);
+    let text = dictionary_spellings(text);
     let mut out: Vec<String> = Vec::new();
     for token in text.split(is_pinyin_separator) {
         if token.is_empty() {
