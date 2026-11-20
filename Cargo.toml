@@ -16,7 +16,10 @@ include = ["/src/**/*.rs", "/tests/cases.rs", "/tests/cases/*.tsv", "/README.md"
 [features]
 # The Python binding (src/python.rs), built by maturin from pyproject.toml
 python = ["dep:pyo3"]
+# The JavaScript binding (src/wasm.rs), built to WebAssembly by npm/build.sh
+wasm = ["dep:wasm-bindgen"]
 
 [dependencies]
 # abi3: one wheel per platform for every Python from 3.9
 pyo3 = { version = "0.30", features = ["abi3-py39"], optional = true }
+wasm-bindgen = { version = "0.2", optional = true }

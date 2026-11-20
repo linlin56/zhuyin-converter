@@ -1,0 +1,21 @@
+{
+  "name": "zhuyin-converter",
+  "description": "Pinyin <-> zhuyin (bopomofo) conversion, Taiwan conventions",
+  "license": "AGPL-3.0-or-later",
+  "author": "linlin56",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linlin56/zhuyin-converter.git"
+  },
+  "keywords": ["zhuyin", "bopomofo", "pinyin", "chinese", "mandarin"],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./node/zhuyin_converter.d.ts",
+      "node": "./node/zhuyin_converter.js",
+      "default": "./web/index.js"
+    }
+  },
+  "types": "./node/zhuyin_converter.d.ts",
+  "files": ["node/", "web/"]
+}

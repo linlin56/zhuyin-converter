@@ -7,6 +7,8 @@ mod pinyin_to_zhuyin;
 #[cfg(feature = "python")]
 mod python;
 mod tables;
+#[cfg(feature = "wasm")]
+mod wasm;
 mod zhuyin_to_pinyin;
 
 pub use common::{is_zhuyin, pinyin_syllables};

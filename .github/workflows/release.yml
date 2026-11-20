@@ -1,9 +1,11 @@
 name: Release
 
-# Push a tag vX.Y.Z (the version in Cargo.toml) to publish the crate to crates.io and the wheels to PyPI.
+# Push a tag vX.Y.Z (the version in Cargo.toml) to publish the crate to crates.io, the wheels to PyPI
+# and the WebAssembly package to npm.
 # Setup once:
 # - crates.io: an API token in the repository secret CARGO_REGISTRY_TOKEN
 # - PyPI: a trusted publisher for this repository, workflow release.yml, environment pypi (no token)
+# - npm: a trusted publisher for this repository, workflow release.yml (no token)
 on:
   push:
     tags: ["v*"]
@@ -82,9 +84,28 @@ jobs:
           merge-multiple: true
       - uses: pypa/gh-action-pypi-publish@release/v1
 
-  # crates.io comes last, so that a failed PyPI release doesn't leave the crate published alone.
-  crates:
+  # The package that the CI's node job built and tested
+  npm:
     needs: [pypi]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # trusted publishing
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: npm-package
+          path: pkg
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+      - run: npm install -g npm@latest  # trusted publishing needs npm 11.5.1 or later
+      - run: npm publish
+        working-directory: pkg
+
+  # crates.io comes last, so that a failed PyPI or npm release doesn't leave the crate published alone.
+  crates:
+    needs: [npm]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
